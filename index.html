@@ -1,64 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dr1pSole</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: black;
-      color: gold;
-    }
-    header {
-      padding: 20px;
-      text-align: center;
-      font-size: 28px;
-      border-bottom: 1px solid gold;
-    }
-    .products {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 40px;
-    }
-    .card {
-      background: #111;
-      padding: 20px;
-      border: 1px solid gold;
-      width: 200px;
-      text-align: center;
-    }
-    button {
-      background: gold;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr1pSole</title>
+
+<style>
+body {
+  margin:0;
+  font-family: 'Poppins', sans-serif;
+  background:black;
+  color:gold;
+}
+
+/* NAVBAR */
+nav {
+  display:flex;
+  justify-content:space-between;
+  padding:20px;
+  border-bottom:1px solid gold;
+}
+
+.logo {
+  font-size:24px;
+  font-weight:bold;
+}
+
+.cart {
+  cursor:pointer;
+}
+
+/* HERO */
+.hero {
+  text-align:center;
+  padding:60px 20px;
+}
+
+.hero h1 {
+  font-size:40px;
+}
+
+/* PRODUCTS */
+.products {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:30px;
+  padding:40px;
+}
+
+.card {
+  background:#111;
+  padding:20px;
+  width:220px;
+  border:1px solid gold;
+  transition:0.3s;
+}
+
+.card:hover {
+  transform:scale(1.05);
+}
+
+button {
+  background:gold;
+  border:none;
+  padding:10px;
+  cursor:pointer;
+  width:100%;
+  margin-top:10px;
+}
+
+/* CART MODAL */
+.cart-box {
+  position:fixed;
+  right:-100%;
+  top:0;
+  width:300px;
+  height:100%;
+  background:#111;
+  padding:20px;
+  transition:0.4s;
+}
+
+.cart-box.active {
+  right:0;
+}
+
+</style>
 </head>
 
 <body>
 
-<header>Dr1pSole 👟</header>
+<nav>
+  <div class="logo">Dr1pSole</div>
+  <div class="cart" onclick="toggleCart()">🛒 Cart (<span id="count">0</span>)</div>
+</nav>
 
-<div class="products">
+<section class="hero">
+  <h1>Step Into Luxury 👟</h1>
+  <p>Premium First Copy Sneakers</p>
+</section>
+
+<section class="products">
+
   <div class="card">
     <h3>Nike Air Replica</h3>
     <p>₹1999</p>
-    <button onclick="buy()">Buy Now</button>
+    <button onclick="addToCart('Nike Air Replica',1999)">Add to Cart</button>
   </div>
 
   <div class="card">
     <h3>Jordan High Copy</h3>
     <p>₹2499</p>
-    <button onclick="buy()">Buy Now</button>
+    <button onclick="addToCart('Jordan High Copy',2499)">Add to Cart</button>
   </div>
+
+  <div class="card">
+    <h3>Yeezy Boost Copy</h3>
+    <p>₹2999</p>
+    <button onclick="addToCart('Yeezy Boost Copy',2999)">Add to Cart</button>
+  </div>
+
+</section>
+
+<!-- CART -->
+<div class="cart-box" id="cartBox">
+  <h2>Your Cart</h2>
+  <ul id="cartItems"></ul>
+  <h3>Total: ₹<span id="total">0</span></h3>
+  <button onclick="checkout()">Checkout</button>
 </div>
 
 <script>
-function buy(){
-  alert("Coming Soon: Payment Page");
+let cart = [];
+let total = 0;
+
+function addToCart(name, price){
+  cart.push({name, price});
+  total += price;
+
+  document.getElementById("count").innerText = cart.length;
+  updateCart();
+}
+
+function updateCart(){
+  let list = document.getElementById("cartItems");
+  list.innerHTML = "";
+
+  cart.forEach(item => {
+    let li = document.createElement("li");
+    li.innerText = item.name + " - ₹" + item.price;
+    list.appendChild(li);
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function toggleCart(){
+  document.getElementById("cartBox").classList.toggle("active");
+}
+
+function checkout(){
+  alert("Payment system coming next step!");
 }
 </script>
 
