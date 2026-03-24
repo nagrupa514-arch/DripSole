@@ -202,10 +202,19 @@ function goCheckout(){
 }
 
 function pay(){
-  alert("Simulated UPI Payment Successful ✅");
+  document.getElementById("checkoutPage").innerHTML = `
+    <h2>Scan & Pay</h2>
+    <img src="qr.png.jpeg" width="200"><br><br>
+    <p>Scan this QR and complete payment</p>
+    <button onclick="confirmPayment()">I Have Paid</button>
+  `;
+}
+
+function confirmPayment(){
   document.getElementById("checkoutPage").style.display="none";
   document.getElementById("successPage").style.display="block";
 }
+  
 </script>
 
 </body>
