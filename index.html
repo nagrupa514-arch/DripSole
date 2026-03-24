@@ -13,7 +13,7 @@ body {
   color:gold;
 }
 
-/* NAVBAR */
+/* NAV */
 nav {
   display:flex;
   justify-content:space-between;
@@ -21,23 +21,13 @@ nav {
   border-bottom:1px solid gold;
 }
 
-.logo {
-  font-size:24px;
-  font-weight:bold;
-}
-
-.cart {
-  cursor:pointer;
-}
+.logo { font-size:24px; font-weight:bold; }
+.cart { cursor:pointer; }
 
 /* HERO */
 .hero {
   text-align:center;
   padding:60px 20px;
-}
-
-.hero h1 {
-  font-size:40px;
 }
 
 /* PRODUCTS */
@@ -51,10 +41,14 @@ nav {
 
 .card {
   background:#111;
-  padding:20px;
+  padding:15px;
   width:220px;
   border:1px solid gold;
   transition:0.3s;
+}
+
+.card img {
+  width:100%;
 }
 
 .card:hover {
@@ -70,7 +64,7 @@ button {
   margin-top:10px;
 }
 
-/* CART MODAL */
+/* CART */
 .cart-box {
   position:fixed;
   right:-100%;
@@ -82,10 +76,28 @@ button {
   transition:0.4s;
 }
 
-.cart-box.active {
-  right:0;
+.cart-box.active { right:0; }
+
+/* CHECKOUT */
+.checkout {
+  display:none;
+  padding:40px;
+  text-align:center;
 }
 
+input {
+  padding:10px;
+  width:80%;
+  margin:10px;
+}
+
+/* SUCCESS */
+.success {
+  display:none;
+  text-align:center;
+  padding:50px;
+  font-size:24px;
+}
 </style>
 </head>
 
@@ -93,42 +105,58 @@ button {
 
 <nav>
   <div class="logo">Dr1pSole</div>
-  <div class="cart" onclick="toggleCart()">🛒 Cart (<span id="count">0</span>)</div>
+  <div class="cart" onclick="toggleCart()">🛒 (<span id="count">0</span>)</div>
 </nav>
 
 <section class="hero">
   <h1>Step Into Luxury 👟</h1>
-  <p>Premium First Copy Sneakers</p>
 </section>
 
 <section class="products">
 
-  <div class="card">
-    <h3>Nike Air Replica</h3>
-    <p>₹1999</p>
-    <button onclick="addToCart('Nike Air Replica',1999)">Add to Cart</button>
-  </div>
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Nike Air Replica</h3>
+<p>₹1999</p>
+<button onclick="addToCart('Nike Air Replica',1999)">Add to Cart</button>
+</div>
 
-  <div class="card">
-    <h3>Jordan High Copy</h3>
-    <p>₹2499</p>
-    <button onclick="addToCart('Jordan High Copy',2499)">Add to Cart</button>
-  </div>
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Jordan High Copy</h3>
+<p>₹2499</p>
+<button onclick="addToCart('Jordan High Copy',2499)">Add to Cart</button>
+</div>
 
-  <div class="card">
-    <h3>Yeezy Boost Copy</h3>
-    <p>₹2999</p>
-    <button onclick="addToCart('Yeezy Boost Copy',2999)">Add to Cart</button>
-  </div>
+<div class="card">
+<img src="https://via.placeholder.com/200">
+<h3>Yeezy Boost Copy</h3>
+<p>₹2999</p>
+<button onclick="addToCart('Yeezy Boost Copy',2999)">Add to Cart</button>
+</div>
 
 </section>
 
 <!-- CART -->
 <div class="cart-box" id="cartBox">
-  <h2>Your Cart</h2>
+  <h2>Cart</h2>
   <ul id="cartItems"></ul>
-  <h3>Total: ₹<span id="total">0</span></h3>
-  <button onclick="checkout()">Checkout</button>
+  <h3>Total ₹<span id="total">0</span></h3>
+  <button onclick="goCheckout()">Checkout</button>
+</div>
+
+<!-- CHECKOUT -->
+<div class="checkout" id="checkoutPage">
+  <h2>Checkout</h2>
+  <input placeholder="Full Name"><br>
+  <input placeholder="Address"><br>
+  <input placeholder="Phone Number"><br>
+  <button onclick="pay()">Pay with UPI</button>
+</div>
+
+<!-- SUCCESS -->
+<div class="success" id="successPage">
+  ✅ Order Placed Successfully!
 </div>
 
 <script>
@@ -138,7 +166,6 @@ let total = 0;
 function addToCart(name, price){
   cart.push({name, price});
   total += price;
-
   document.getElementById("count").innerText = cart.length;
   updateCart();
 }
@@ -147,21 +174,37 @@ function updateCart(){
   let list = document.getElementById("cartItems");
   list.innerHTML = "";
 
-  cart.forEach(item => {
+  cart.forEach((item, index) => {
     let li = document.createElement("li");
-    li.innerText = item.name + " - ₹" + item.price;
+    li.innerHTML = item.name + " - ₹" + item.price +
+    " <button onclick='removeItem("+index+")'>X</button>";
     list.appendChild(li);
   });
 
   document.getElementById("total").innerText = total;
 }
 
+function removeItem(i){
+  total -= cart[i].price;
+  cart.splice(i,1);
+  document.getElementById("count").innerText = cart.length;
+  updateCart();
+}
+
 function toggleCart(){
   document.getElementById("cartBox").classList.toggle("active");
 }
 
-function checkout(){
-  alert("Payment system coming next step!");
+function goCheckout(){
+  document.querySelector(".products").style.display="none";
+  document.getElementById("cartBox").style.display="none";
+  document.getElementById("checkoutPage").style.display="block";
+}
+
+function pay(){
+  alert("Simulated UPI Payment Successful ✅");
+  document.getElementById("checkoutPage").style.display="none";
+  document.getElementById("successPage").style.display="block";
 }
 </script>
 
